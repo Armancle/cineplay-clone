@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up | CinePlay</title>
+  <meta name="description" content="Create a CinePlay account to personalize movie and game recommendations and save your watchlist.">
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <style>
+    .auth-page-wrapper {
+      min-height: calc(100vh - 80px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      position: relative;
+      background: radial-gradient(circle at 50% 20%, rgba(229, 9, 20, 0.08) 0%, rgba(13, 13, 18, 1) 70%);
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 460px;
+      background: rgba(20, 20, 29, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 38px 35px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 30px rgba(229, 9, 20, 0.1);
+      position: relative;
+      z-index: 2;
+    }
+    .auth-card-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .auth-card-header .logo {
+      font-size: 28px;
+      display: inline-flex;
+      margin-bottom: 10px;
+    }
+    .auth-card-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .auth-card-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .form-group {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-wrapper i.input-icon {
+      position: absolute;
+      left: 14px;
+      color: var(--text-muted);
+      font-size: 15px;
+      pointer-events: none;
+      transition: color 0.2s ease;
+    }
+    .input-field {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 11px 14px 11px 42px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .input-field:focus {
+      border-color: var(--accent-red);
+      background: rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
+    }
+    .btn-submit-auth {
+      width: 100%;
+      padding: 13px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-top: 8px;
+      background: linear-gradient(135deg, #e50914 0%, #b80710 100%);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.25s ease;
+      box-shadow: 0 8px 20px rgba(229, 9, 20, 0.3);
+    }
+    .btn-submit-auth:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(229, 9, 20, 0.45);
+    }
+    .btn-submit-auth:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .auth-divider-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .auth-divider-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+    .btn-google-auth {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.2s ease;
+    }
+    .btn-google-auth:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.25);
+      transform: translateY(-1px);
+    }
+    .btn-google-auth i {
+      font-size: 16px;
+      color: #4285F4;
+    }
+    .auth-card-footer {
+      text-align: center;
+      margin-top: 22px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .auth-card-footer a {
+      color: var(--accent-red);
+      font-weight: 600;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .auth-card-footer a:hover {
+      text-decoration: underline;
+    }
+    .auth-error-box {
+      display: none;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: rgba(229, 9, 20, 0.15);
+      border: 1px solid rgba(229, 9, 20, 0.4);
+      color: #ff6b6b;
+      font-size: 13px;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+    .auth-success-box {
+      display: none;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: rgba(46, 204, 113, 0.15);
+      border: 1px solid rgba(46, 204, 113, 0.4);
+      color: #2ecc71;
+      font-size: 13px;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+    .password-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Minimal Header -->
+  <header>
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        <i class="fa-solid fa-play"></i> Cine<span>Play</span>
+      </a>
+      <nav class="nav-menu" id="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="movies.html" class="nav-link">Movies</a>
+        <a href="games.html" class="nav-link">Games</a>
+        <a href="recommendations.html" class="nav-link">Find Match</a>
+        <a href="favorites.html" class="nav-link">Favorites</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="login.html" class="btn btn-outline" style="border-radius: 20px; padding: 6px 16px; font-size: 13px;">Sign In</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Signup Main Content -->
+  <main class="auth-page-wrapper">
+    <div class="auth-card">
+      <div class="auth-card-header">
+        <a href="index.html" class="logo">
+          <i class="fa-solid fa-play"></i> Cine<span>Play</span>
+        </a>
+        <h1 class="auth-card-title">Create Account</h1>
+        <p class="auth-card-subtitle">Join CinePlay for tailored movies and game matches</p>
+      </div>
+
+      <div id="auth-error-box" class="auth-error-box">
+        <i class="fa-solid fa-circle-exclamation" style="margin-right: 6px;"></i>
+        <span id="auth-error-text">Registration error.</span>
+      </div>
+
+      <div id="auth-success-box" class="auth-success-box">
+        <i class="fa-solid fa-circle-check" style="margin-right: 6px;"></i>
+        <span id="auth-success-text">Account created successfully! Redirecting...</span>
+      </div>
+
+      <!-- Manual Registration Form -->
+      <form id="signup-form">
+        <div class="form-group">
+          <label class="form-label" for="signup-username">Enter your username</label>
+          <div class="input-wrapper">
+            <input type="text" id="signup-username" class="input-field" placeholder="e.g. Cinephile99" required autocomplete="username">
+            <i class="fa-solid fa-user input-icon"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="signup-email">Enter your email <span style="font-weight: 400; opacity: 0.7;">(optional)</span></label>
+          <div class="input-wrapper">
+            <input type="email" id="signup-email" class="input-field" placeholder="you@example.com" autocomplete="email">
+            <i class="fa-solid fa-envelope input-icon"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="signup-password">Enter your password</label>
+          <div class="input-wrapper">
+            <input type="password" id="signup-password" class="input-field" placeholder="••••••••" required autocomplete="new-password">
+            <i class="fa-solid fa-lock input-icon"></i>
+          </div>
+          <div class="password-hint">Minimum 4 characters</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="signup-confirm-password">Confirm your password</label>
+          <div class="input-wrapper">
+            <input type="password" id="signup-confirm-password" class="input-field" placeholder="••••••••" required autocomplete="new-password">
+            <i class="fa-solid fa-shield-halved input-icon"></i>
+          </div>
+        </div>
+
+        <button type="submit" id="btn-submit-signup" class="btn-submit-auth">
+          <span>Create Account</span> <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </form>
+
+      <!-- OR Divider -->
+      <div class="auth-divider">
+        <div class="auth-divider-line"></div>
+        <span class="auth-divider-text">or</span>
+        <div class="auth-divider-line"></div>
+      </div>
+
+      <!-- Google Sign In Button -->
+      <button type="button" id="btn-google-signup" class="btn-google-auth">
+        <i class="fa-brands fa-google"></i>
+        <span>Sign in with Google</span>
+      </button>
+
+      <div class="auth-card-footer">
+        Already have an account? <a href="login.html">Sign in here</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-bottom" style="border-top: 1px solid rgba(255,255,255,0.06); padding: 25px 0;">
+      <p>&copy; 2026 CinePlay. Made as a BCA Mini Project. All rights reserved.</p>
+      <div style="display: flex; gap: 20px; align-items: center;">
+        <a href="index.html">Home</a>
+        <a href="movies.html">Movies</a>
+        <a href="login.html">Sign In</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const signupForm = document.getElementById("signup-form");
+      const usernameInput = document.getElementById("signup-username");
+      const emailInput = document.getElementById("signup-email");
+      const passwordInput = document.getElementById("signup-password");
+      const confirmPasswordInput = document.getElementById("signup-confirm-password");
+      const submitBtn = document.getElementById("btn-submit-signup");
+      const googleBtn = document.getElementById("btn-google-signup");
+      const errorBox = document.getElementById("auth-error-box");
+      const errorText = document.getElementById("auth-error-text");
+      const successBox = document.getElementById("auth-success-box");
+      const successText = document.getElementById("auth-success-text");
+
+      function showError(msg) {
+        errorText.textContent = msg || "An error occurred during registration.";
+        errorBox.style.display = "block";
+        successBox.style.display = "none";
+      }
+
+      function showSuccess(msg) {
+        successText.textContent = msg || "Account created successfully!";
+        successBox.style.display = "block";
+        errorBox.style.display = "none";
+      }
+
+      // Manual Register Handler
+      signupForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        errorBox.style.display = "none";
+
+        const username = usernameInput.value.trim();
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+
+        if (!username) {
+          showError("Please enter your username.");
+          return;
+        }
+
+        if (password.length < 4) {
+          showError("Password must be at least 4 characters long.");
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          showError("Passwords do not match. Please re-enter.");
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Creating Account...</span>`;
+
+        try {
+          if (window.CinePlayAuth && window.CinePlayAuth.registerManual) {
+            await window.CinePlayAuth.registerManual(username, email, password);
+            showSuccess(`Account created for ${username}! Redirecting to CinePlay...`);
+            setTimeout(() => {
+              window.location.href = "index.html";
+            }, 1000);
+          } else {
+            throw new Error("Authentication module not loaded. Please refresh.");
+          }
+        } catch (err) {
+          showError(err.message || "Failed to create account. Username or email may already be taken.");
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<span>Create Account</span> <i class="fa-solid fa-arrow-right"></i>`;
+        }
+      });
+
+      // Google Sign In Handler
+      googleBtn.addEventListener("click", async () => {
+        errorBox.style.display = "none";
+        googleBtn.disabled = true;
+        googleBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Connecting to Google...</span>`;
+
+        try {
+          if (window.CinePlayAuth && window.CinePlayAuth.loginGoogle) {
+            const user = await window.CinePlayAuth.loginGoogle();
+            showSuccess(`Welcome, ${user.displayName || "User"}! Redirecting to CinePlay...`);
+            setTimeout(() => {
+              window.location.href = "index.html";
+            }, 1000);
+          } else {
+            throw new Error("Google authentication not ready.");
+          }
+        } catch (err) {
+          showError(err.message || "Google Sign-In was cancelled or failed.");
+          googleBtn.disabled = false;
+          googleBtn.innerHTML = `<i class="fa-brands fa-google"></i> <span>Sign in with Google</span>`;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

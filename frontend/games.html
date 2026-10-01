@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Games | CinePlay Movie & Game Recommendations</title>
+  <meta name="description" content="Explore our offline catalog of top games. Search, filter by platform and genre, sort by rating and release year, and view details.">
+  <!-- Favicon / Website Icon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        <i class="fa-solid fa-play"></i> Cine<span>Play</span>
+      </a>
+      <nav class="nav-menu" id="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="movies.html" class="nav-link">Movies</a>
+        <a href="games.html" class="nav-link active">Games</a>
+        <a href="recommendations.html" class="nav-link">Find Match</a>
+        <a href="favorites.html" class="nav-link">Favorites</a>
+        <a href="about.html" class="nav-link">About</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="nav-icon-btn btn-search-toggle" onclick="CinePlay.openUniversalSearch()" aria-label="Open Universal Search" title="Universal Search (Ctrl+K)">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+        <div id="auth-container"></div>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
+          <i class="fa-solid fa-sun"></i>
+        </button>
+        <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle Navigation Menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Banner Spacer -->
+  <div style="height: 100px;"></div>
+
+  <!-- Search and Filter Panel -->
+  <main class="container section-padding" style="padding-top: 40px;">
+    <div class="section-header" style="margin-bottom: 20px;">
+      <div>
+        <span class="slide-tag" style="background: rgba(229, 9, 20, 0.1); color: var(--accent-red); margin-bottom: 5px;">Discover Catalog</span>
+        <h1 class="section-title" style="font-size: 32px; padding: 0;">Discover Games</h1>
+        <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">Find your next game with Steam-inspired density, tags, platform filters, and system requirements.</p>
+      </div>
+      <div>
+        <button class="btn btn-primary" onclick="CinePlay.triggerSurpriseMe('game')" style="border-radius: 30px;">
+          <i class="fa-solid fa-dice"></i> Surprise Me
+        </button>
+      </div>
+    </div>
+
+    <!-- Search Box & Filter Toggle Bar -->
+    <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; position: relative; z-index: 10; align-items: center;">
+      <div class="search-input-wrapper" style="flex: 1; min-width: 280px; position: relative; z-index: 10;">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="Search games, developers, tags..." class="search-input" id="game-search" value="" autocomplete="off">
+      </div>
+      <button class="btn btn-outline" id="btn-toggle-game-filters" style="border-radius: 30px; padding: 14px 24px; font-weight: 600; height: 50px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+        <i class="fa-solid fa-sliders"></i> Game Filters <span id="game-filter-count" style="background: var(--accent-red); color: #fff; border-radius: 50%; padding: 2px 7px; font-size: 11px; margin-left: 4px; display: none;">0</span>
+      </button>
+    </div>
+
+    <!-- Active Filter Chips Bar -->
+    <div class="active-filter-chips" id="game-chips-container">
+      <!-- Populated dynamically -->
+    </div>
+
+    <!-- Advanced Game Filter Drawer -->
+    <div class="advanced-filter-drawer glass-panel" id="advanced-game-filter-drawer">
+      <div class="filter-drawer-header">
+        <div class="filter-drawer-title">
+          <i class="fa-solid fa-gamepad" style="color: var(--accent-red);"></i> Advanced Game Filters
+        </div>
+        <button id="btn-close-game-drawer" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 20px; padding: 4px 8px;">&times;</button>
+      </div>
+
+      <div class="filter-grid-layout">
+        <!-- Card 1: Sort By -->
+        <div class="filter-card-block">
+          <label class="filter-field-label"><i class="fa-solid fa-arrow-down-wide-short" style="color: var(--accent-red);"></i> Sort By</label>
+          <select class="filter-select-styled" id="game-sort">
+            <option value="rating-desc" selected>⭐ Rating: High to Low</option>
+            <option value="year-desc">🎮 Year: Newest First</option>
+            <option value="rating-asc">📊 Rating: Low to High</option>
+            <option value="year-asc">🕰️ Year: Oldest First</option>
+            <option value="title-asc">🔤 Title: A to Z</option>
+          </select>
+        </div>
+
+        <!-- Card 2: Platform -->
+        <div class="filter-card-block">
+          <label class="filter-field-label"><i class="fa-solid fa-desktop" style="color: #3b82f6;"></i> Gaming Platform</label>
+          <select class="filter-select-styled" id="game-platform">
+            <option value="All">🎮 All Platforms</option>
+            <option value="PC">🖥️ PC (Windows / Steam)</option>
+            <option value="PlayStation">🔵 PlayStation (PS5 / PS4)</option>
+            <option value="Xbox">🟢 Xbox (Series X/S)</option>
+            <option value="Nintendo Switch">🔴 Nintendo Switch</option>
+          </select>
+        </div>
+
+        <!-- Card 3: Price Category -->
+        <div class="filter-card-block">
+          <label class="filter-field-label"><i class="fa-solid fa-tags" style="color: #10b981;"></i> Price Category</label>
+          <select class="filter-select-styled" id="game-price">
+            <option value="All">🏷️ All Prices</option>
+            <option value="Free">🎁 Free to Play</option>
+            <option value="Under500">💰 Budget: Under ₹1,000</option>
+            <option value="Under2000">💳 Standard: ₹1,000 – ₹2,500</option>
+            <option value="2000Plus">👑 AAA / Premium: ₹2,500+</option>
+          </select>
+        </div>
+
+        <!-- Card 4: Player Experience Mode -->
+        <div class="filter-card-block">
+          <label class="filter-field-label"><i class="fa-solid fa-users" style="color: #f59e0b;"></i> Experience Mode</label>
+          <select class="filter-select-styled" id="game-experience">
+            <option value="All">🕹️ All Modes</option>
+            <option value="Singleplayer">👤 Singleplayer Story Rich</option>
+            <option value="Multiplayer">👥 Multiplayer / Co-Op</option>
+            <option value="Open World">🌐 Open World Exploration</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Genres Multi-Select -->
+      <div class="filter-genre-section">
+        <label class="filter-field-label" style="margin-bottom: 12px;"><i class="fa-solid fa-icons" style="color: var(--accent-red);"></i> Filter By Game Genre</label>
+        <div class="genres-pills" id="genres-container">
+          <button class="genre-pill active" data-genre="All">All Genres</button>
+          <button class="genre-pill" data-genre="RPG">RPG</button>
+          <button class="genre-pill" data-genre="Action">Action</button>
+          <button class="genre-pill" data-genre="Adventure">Adventure</button>
+          <button class="genre-pill" data-genre="Indie">Indie</button>
+          <button class="genre-pill" data-genre="Horror">Horror</button>
+          <button class="genre-pill" data-genre="Sci-Fi">Sci-Fi</button>
+          <button class="genre-pill" data-genre="Sandbox">Sandbox</button>
+          <button class="genre-pill" data-genre="Metroidvania">Metroidvania</button>
+          <button class="genre-pill" data-genre="Roguelike">Roguelike</button>
+          <button class="genre-pill" data-genre="Puzzle">Puzzle</button>
+          <button class="genre-pill" data-genre="Superhero">Superhero</button>
+          <button class="genre-pill" data-genre="Detective">Detective</button>
+        </div>
+      </div>
+
+      <!-- Action Buttons & Match Counter -->
+      <div class="filter-drawer-actions">
+        <div class="filter-match-count" id="game-match-count-text">
+          <i class="fa-solid fa-sparkles" style="color: var(--accent-red);"></i> Ready to filter games
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <button class="btn btn-outline" id="btn-reset-game-filters" style="border-radius: 25px; padding: 10px 22px;">
+            <i class="fa-solid fa-rotate-left"></i> Reset All
+          </button>
+          <button class="btn btn-primary" id="btn-apply-game-filters" style="border-radius: 25px; padding: 10px 26px;">
+            <i class="fa-solid fa-check"></i> Apply Filters
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Games Grid -->
+    <div class="media-grid" id="games-grid">
+      <!-- Loading Skeletons -->
+      <div class="media-card skeleton-card">
+        <div class="card-img-wrapper skeleton" style="aspect-ratio: 2/3;"></div>
+        <div class="card-content">
+          <div class="skeleton" style="height: 12px; width: 40%; margin-bottom: 10px;"></div>
+          <div class="skeleton" style="height: 20px; width: 80%; margin-bottom: 12px;"></div>
+          <div class="skeleton" style="height: 12px; width: 60%; margin-bottom: 20px;"></div>
+          <div class="skeleton" style="height: 35px; width: 100%;"></div>
+        </div>
+      </div>
+      <div class="media-card skeleton-card">
+        <div class="card-img-wrapper skeleton" style="aspect-ratio: 2/3;"></div>
+        <div class="card-content">
+          <div class="skeleton" style="height: 12px; width: 45%; margin-bottom: 10px;"></div>
+          <div class="skeleton" style="height: 20px; width: 75%; margin-bottom: 12px;"></div>
+          <div class="skeleton" style="height: 12px; width: 55%; margin-bottom: 20px;"></div>
+          <div class="skeleton" style="height: 35px; width: 100%;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="games-empty" style="display: none;">
+      <i class="fa-solid fa-gamepad empty-state-icon"></i>
+      <h3 class="empty-state-title">No Games Found</h3>
+      <p class="empty-state-desc">We couldn't find any games matching your search query or selected criteria. Try checking spelling or resetting filters.</p>
+      <button class="btn btn-primary" id="btn-reset-filters">Reset Filters</button>
+    </div>
+
+    <!-- Load More -->
+    <div class="pagination-container" id="pagination-wrapper">
+      <button class="btn btn-primary" id="btn-load-more" style="display: none;">
+        <i class="fa-solid fa-arrows-spin"></i> Load More Games
+      </button>
+    </div>
+
+    <!-- Recently Viewed Section -->
+    <section class="recently-viewed-section scroll-reveal" id="recently-viewed-container" style="display: none;">
+      <div class="section-header">
+        <h2 class="section-title">Recently Viewed</h2>
+      </div>
+      <div class="slider-outer">
+        <div class="slider-inner" id="recently-viewed-slider">
+          <!-- Populated by dynamic list -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <a href="index.html" class="logo footer-logo">
+          <i class="fa-solid fa-play"></i> Cine<span>Play</span>
+        </a>
+        <p class="footer-desc">CinePlay is a portfolio-ready movie and game matching & recommendation platform. Built for BCA Mini Project using modern HTML5, CSS3, and ES6.</p>
+        <div class="footer-contact">
+          <i class="fa-solid fa-envelope" style="color: var(--accent-red);"></i>
+          <a href="mailto:cineplayofficials@gmail.com">cineplayofficials@gmail.com</a>
+        </div>
+        <div class="footer-socials">
+          <a href="https://www.linkedin.com/in/ibrahim-haji-647836347" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+          <a href="https://www.instagram.com/cineplay_officials" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="mailto:cineplayofficials@gmail.com" class="social-link" aria-label="Email Us"><i class="fa-solid fa-envelope"></i></a>
+        </div>
+      </div>
+      <div>
+        <h3 class="footer-title">Browse</h3>
+        <ul class="footer-links">
+          <li><a href="movies.html">Movies Catalog</a></li>
+          <li><a href="games.html">Games Catalog</a></li>
+          <li><a href="recommendations.html">Recommendation Engine</a></li>
+          <li><a href="favorites.html">Your Favorites</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer-title">Platform</h3>
+        <ul class="footer-links">
+          <li><a href="about.html">About Project</a></li>
+          <li><a href="about.html#features">Features</a></li>
+          <li><a href="about.html#tech">Tech Stack</a></li>
+          <li><a href="about.html#developers">Contributors</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer-title">Contributors</h3>
+        <div class="footer-contributors">
+          <div class="contributor-item">
+            <div class="contributor-name"><i class="fa-solid fa-code" style="color: var(--accent-red); margin-right: 6px;"></i> Ibrahim Haji</div>
+            <div class="contributor-role">Developer</div>
+            <a href="mailto:ibrahim.haji.3595@gmail.com" class="contributor-email">ibrahim.haji.3595@gmail.com</a>
+          </div>
+          <div class="contributor-item">
+            <div class="contributor-name"><i class="fa-solid fa-palette" style="color: var(--accent-red); margin-right: 6px;"></i> Arman Khan</div>
+            <div class="contributor-role">Designer & Product Manager</div>
+            <a href="mailto:rdjfanarman@gmail.com" class="contributor-email">rdjfanarman@gmail.com</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 CinePlay. Made as a BCA Mini Project. All rights reserved.</p>
+      <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+        <a href="mailto:cineplayofficials@gmail.com" style="color: var(--accent-red); font-weight: 500;"><i class="fa-solid fa-envelope"></i> cineplayofficials@gmail.com</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <!-- Firebase Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/api-service.js"></script>
+  <script src="js/firestore-service.js"></script>
+  <script src="js/cineplay-data-manager.js"></script>
+
+  <script src="js/data.js?v=3"></script>
+  <script src="js/app.js?v=3"></script>
+  <script src="js/games.js?v=3"></script>
+</body>
+</html>

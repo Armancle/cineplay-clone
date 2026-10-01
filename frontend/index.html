@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CinePlay | Movie & Game Recommendations</title>
+  <meta name="description" content="Discover your next favorite movie or game. Personalized recommendations, glassmorphic dark interface, and interactive filtering.">
+  <!-- Favicon / Website Icon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        <i class="fa-solid fa-play"></i> Cine<span>Play</span>
+      </a>
+      <nav class="nav-menu" id="nav-menu">
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="movies.html" class="nav-link">Movies</a>
+        <a href="games.html" class="nav-link">Games</a>
+        <a href="recommendations.html" class="nav-link">Find Match</a>
+        <a href="favorites.html" class="nav-link">Favorites</a>
+        <a href="about.html" class="nav-link">About</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="nav-icon-btn btn-search-toggle" onclick="CinePlay.openUniversalSearch()" aria-label="Open Universal Search" title="Universal Search (Ctrl+K)">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+        <div id="auth-container"></div>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
+          <i class="fa-solid fa-sun"></i>
+        </button>
+        <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle Navigation Menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Slider -->
+  <section class="hero-slider" id="hero-slider">
+    <!-- Slide 1 -->
+    <div class="slide active">
+      <img src="images/hero/dune-part-two-banner.jpg" alt="Dune: Part Two" class="slide-img">
+      <div class="slide-container">
+        <div class="slide-content">
+          <span class="slide-tag"><i class="fa-solid fa-compass"></i> YOUR PERSONAL ENTERTAINMENT GUIDE</span>
+          <h1 class="slide-title">Find Something You'll Actually Love.</h1>
+          <p class="slide-desc" style="font-size: 16px; margin-bottom: 25px; color: rgba(255, 255, 255, 0.9);">Discover movies and games based on your mood, taste, era, and personal preferences.</p>
+          <div class="slide-actions">
+            <a href="movies.html" class="btn btn-primary"><i class="fa-solid fa-film"></i> Explore Movies</a>
+            <a href="games.html" class="btn btn-outline"><i class="fa-solid fa-gamepad"></i> Explore Games</a>
+            <a href="recommendations.html" class="btn btn-outline" style="border-color: var(--accent-red);"><i class="fa-solid fa-wand-magic-sparkles"></i> Find My Match</a>
+            <button class="btn btn-outline" onclick="CinePlay.triggerSurpriseMe()"><i class="fa-solid fa-dice"></i> Surprise Me</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Slide 2 -->
+    <div class="slide">
+      <img src="images/hero/elden-ring-banner.jpg" alt="Elden Ring" class="slide-img">
+      <div class="slide-container">
+        <div class="slide-content">
+          <span class="slide-tag">Masterpiece Game</span>
+          <h1 class="slide-title">Elden Ring</h1>
+          <div class="slide-meta">
+            <span class="rating"><i class="fa-solid fa-star"></i> 9.6</span>
+            <span>2022</span>
+            <span>RPG / Action / Dark Fantasy</span>
+          </div>
+          <p class="slide-desc">In the Lands Between ruled by Queen Marika the Eternal, the Elden Ring has been shattered. The Tarnished must rise and become the Elden Lord.</p>
+          <div class="slide-actions">
+            <button class="btn btn-primary" onclick="CinePlay.openTrailerModal('E3Huy2cdih0', 'Elden Ring')"><i class="fa-solid fa-play"></i> Watch Trailer</button>
+            <button class="btn btn-outline" onclick="openFeaturedItem('g2')"><i class="fa-solid fa-circle-info"></i> More Info</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Slide 3 -->
+    <div class="slide">
+      <img src="images/hero/interstellar-banner.jpg" alt="Interstellar" class="slide-img">
+      <div class="slide-container">
+        <div class="slide-content">
+          <span class="slide-tag">Must-Watch Classic</span>
+          <h1 class="slide-title">Interstellar</h1>
+          <div class="slide-meta">
+            <span class="rating"><i class="fa-solid fa-star"></i> 8.7</span>
+            <span>2014</span>
+            <span>Sci-Fi / Drama / Adventure</span>
+          </div>
+          <p class="slide-desc">When Earth becomes uninhabitable, a team of explorers travels through a wormhole in space in an attempt to ensure humanity's survival.</p>
+          <div class="slide-actions">
+            <button class="btn btn-primary" onclick="CinePlay.openTrailerModal('zSWdZVtXT7E', 'Interstellar')"><i class="fa-solid fa-play"></i> Watch Trailer</button>
+            <button class="btn btn-outline" onclick="openFeaturedItem('m3')"><i class="fa-solid fa-circle-info"></i> More Info</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carousel Controls -->
+    <button class="carousel-btn carousel-prev" id="carousel-prev" aria-label="Previous Slide"><i class="fa-solid fa-chevron-left"></i></button>
+    <button class="carousel-btn carousel-next" id="carousel-next" aria-label="Next Slide"><i class="fa-solid fa-chevron-right"></i></button>
+    <div class="carousel-dots" id="carousel-dots"></div>
+  </section>
+
+  <!-- Search & Anti-Scroll Callout Section -->
+  <section class="container search-container scroll-reveal">
+    <form class="search-box glass-panel" id="home-search-form">
+      <div class="search-input-wrapper">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="Search movies, games, genres..." class="search-input" id="home-search-input" autocomplete="off" required>
+      </div>
+      <div class="filter-group" style="padding-right: 15px;">
+        <select class="filter-select" id="search-type" aria-label="Search Type" style="border: none; background: transparent;">
+          <option value="movies">in Movies</option>
+          <option value="games">in Games</option>
+        </select>
+      </div>
+      <button type="submit" class="search-btn">Search</button>
+    </form>
+
+    <div class="anti-scroll-banner" style="margin-top: 25px;">
+      <div class="anti-scroll-text">
+        <h3><i class="fa-solid fa-bolt" style="color: var(--accent-red); margin-right: 8px;"></i> Stop Endless Netflix Homepage Scrolling!</h3>
+        <p>Instead of browsing endlessly, answer 4 quick vibe questions to get your instant movie match.</p>
+      </div>
+      <button class="btn btn-primary" onclick="CinePlay.openMoodQuizModal()" style="border-radius: 30px; padding: 12px 24px;">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> Launch Mood Quiz
+      </button>
+    </div>
+  </section>
+
+  <!-- Why CinePlay? Feature Cards Section -->
+  <section class="container section-padding scroll-reveal">
+    <div class="section-header" style="justify-content: center; text-align: center; margin-bottom: 30px;">
+      <div>
+        <span class="slide-tag" style="background: rgba(229, 9, 20, 0.1); color: var(--accent-red); margin-bottom: 5px;">Platform Highlights</span>
+        <h2 class="section-title">Why CinePlay?</h2>
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
+      <div class="glass-panel hover-scale" style="padding: 25px; border-radius: 16px; border: 1px solid var(--border-color);">
+        <i class="fa-solid fa-compass" style="font-size: 32px; color: var(--accent-red); margin-bottom: 15px;"></i>
+        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">🎬 Discover</h3>
+        <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5;">Explore movies and games based on your exact interests, genres, and eras.</p>
+      </div>
+      <div class="glass-panel hover-scale" style="padding: 25px; border-radius: 16px; border: 1px solid var(--border-color);">
+        <i class="fa-solid fa-bullseye" style="font-size: 32px; color: var(--rating-yellow); margin-bottom: 15px;"></i>
+        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">🎯 Find Your Match</h3>
+        <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5;">Get personalized recommendations powered by smart mood matching.</p>
+      </div>
+      <div class="glass-panel hover-scale" style="padding: 25px; border-radius: 16px; border: 1px solid var(--border-color);">
+        <i class="fa-solid fa-heart" style="font-size: 32px; color: var(--accent-red); margin-bottom: 15px;"></i>
+        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">❤️ Save Favorites</h3>
+        <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5;">Keep your favorite entertainment titles organized in your personal collection.</p>
+      </div>
+      <div class="glass-panel hover-scale" style="padding: 25px; border-radius: 16px; border: 1px solid var(--border-color);">
+        <i class="fa-solid fa-magnifying-glass" style="font-size: 32px; color: #3b82f6; margin-bottom: 15px;"></i>
+        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">🔎 Search Smarter</h3>
+        <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5;">Find titles, actors, directors, and games instantly with universal live search.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Movies Section -->
+  <section class="container section-padding scroll-reveal">
+    <div class="section-header">
+      <div>
+        <span class="slide-tag" style="background: rgba(229, 9, 20, 0.1); color: var(--accent-red); margin-bottom: 5px;">Featured Movies</span>
+        <h2 class="section-title">Trending in Movies</h2>
+      </div>
+      <a href="movies.html" class="section-link">View All <i class="fa-solid fa-arrow-right-long"></i></a>
+    </div>
+    <div class="slider-outer">
+      <div class="slider-inner" id="featured-movies-slider">
+        <!-- Movies populated dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Games Section -->
+  <section class="container section-padding scroll-reveal">
+    <div class="section-header">
+      <div>
+        <span class="slide-tag" style="background: rgba(229, 9, 20, 0.1); color: var(--accent-red); margin-bottom: 5px;">Featured Games</span>
+        <h2 class="section-title">Trending in Games</h2>
+      </div>
+      <a href="games.html" class="section-link">View All <i class="fa-solid fa-arrow-right-long"></i></a>
+    </div>
+    <div class="slider-outer">
+      <div class="slider-inner" id="featured-games-slider">
+        <!-- Games populated dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Recommendations CTA -->
+  <section class="container section-padding scroll-reveal">
+    <div class="cta-banner glass-panel">
+      <div class="cta-content">
+        <h2 class="cta-title">Not sure what to watch or play?</h2>
+        <p class="cta-desc">Let CinePlay's smart matching engine find the perfect match. Select your mood, category, era, and platform to get custom matches in seconds!</p>
+      </div>
+      <a href="recommendations.html" class="btn btn-primary btn-large" style="padding: 16px 36px; border-radius: 30px; font-size: 16px;">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> Try Matchmaker
+      </a>
+    </div>
+  </section>
+
+  <!-- Genres Showcase -->
+  <section class="container section-padding scroll-reveal">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Browse by Genre</h2>
+      </div>
+      <a href="movies.html" class="section-link">All Genres <i class="fa-solid fa-arrow-right-long"></i></a>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px;">
+      <a href="movies.html?genre=Sci-Fi" class="rec-card glass-panel hover-scale">
+        <i class="fa-solid fa-rocket"></i>
+        <div class="rec-card-title">Sci-Fi</div>
+      </a>
+      <a href="movies.html?genre=Action" class="rec-card glass-panel hover-scale">
+        <i class="fa-solid fa-burst"></i>
+        <div class="rec-card-title">Action</div>
+      </a>
+      <a href="movies.html?genre=Adventure" class="rec-card glass-panel hover-scale">
+        <i class="fa-solid fa-compass"></i>
+        <div class="rec-card-title">Adventure</div>
+      </a>
+      <a href="movies.html?genre=Drama" class="rec-card glass-panel hover-scale">
+        <i class="fa-solid fa-masks-theater"></i>
+        <div class="rec-card-title">Drama</div>
+      </a>
+      <a href="movies.html?genre=Thriller" class="rec-card glass-panel hover-scale">
+        <i class="fa-solid fa-skull"></i>
+        <div class="rec-card-title">Thriller</div>
+      </a>
+      <a href="movies.html?genre=Animation" class="rec-card glass-panel hover-scale">
+        <i class="fa-solid fa-palette"></i>
+        <div class="rec-card-title">Animation</div>
+      </a>
+      <a href="movies.html?genre=Horror" class="rec-card glass-panel hover-scale">
+        <i class="fa-solid fa-ghost"></i>
+        <div class="rec-card-title">Horror</div>
+      </a>
+      <a href="movies.html?genre=Comedy" class="rec-card glass-panel hover-scale">
+        <i class="fa-solid fa-face-laugh-squint"></i>
+        <div class="rec-card-title">Comedy</div>
+      </a>
+      <a href="movies.html?genre=Romance" class="rec-card glass-panel hover-scale">
+        <i class="fa-solid fa-heart"></i>
+        <div class="rec-card-title">Romance</div>
+      </a>
+      <a href="movies.html?genre=Mystery" class="rec-card glass-panel hover-scale">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <div class="rec-card-title">Mystery</div>
+      </a>
+      <a href="movies.html?genre=Crime" class="rec-card glass-panel hover-scale">
+        <i class="fa-solid fa-handcuffs"></i>
+        <div class="rec-card-title">Crime</div>
+      </a>
+      <a href="movies.html?genre=Fantasy" class="rec-card glass-panel hover-scale">
+        <i class="fa-solid fa-dragon"></i>
+        <div class="rec-card-title">Fantasy</div>
+      </a>
+      <a href="movies.html?genre=Music" class="rec-card glass-panel hover-scale">
+        <i class="fa-solid fa-music"></i>
+        <div class="rec-card-title">Music</div>
+      </a>
+      <a href="games.html?genre=RPG" class="rec-card glass-panel hover-scale">
+        <i class="fa-solid fa-shield-halved"></i>
+        <div class="rec-card-title">RPG</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Statistics Section -->
+  <section class="container section-padding scroll-reveal">
+    <div class="stats-grid glass-panel">
+      <div class="stat-card">
+        <div class="stat-number" data-target="21" data-suffix="+">0</div>
+        <div class="stat-label">CinePlay Movies</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" data-target="21" data-suffix="+">0</div>
+        <div class="stat-label">CinePlay Games</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" data-target="98" data-suffix="%">0</div>
+        <div class="stat-label">Match Accuracy</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" data-target="5000" data-suffix="+">0</div>
+        <div class="stat-label">Happy Users</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="container scroll-reveal">
+    <div class="newsletter-section">
+      <h2 class="newsletter-title">Subscribe to CinePlay Digest</h2>
+      <p class="newsletter-desc">Get weekly custom recommendations, gaming updates, movie reviews, and new releases sent straight to your inbox.</p>
+      <form class="newsletter-form" id="newsletter-form">
+        <input type="email" placeholder="Enter your email address" class="newsletter-input" required>
+        <button type="submit" class="newsletter-btn">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <a href="index.html" class="logo footer-logo">
+          <i class="fa-solid fa-play"></i> Cine<span>Play</span>
+        </a>
+        <p class="footer-desc">CinePlay is a portfolio-ready movie and game matching & recommendation platform. Built for BCA Mini Project using modern HTML5, CSS3, and ES6.</p>
+        <div class="footer-contact">
+          <i class="fa-solid fa-envelope" style="color: var(--accent-red);"></i>
+          <a href="mailto:cineplayofficials@gmail.com">cineplayofficials@gmail.com</a>
+        </div>
+        <div class="footer-socials">
+          <a href="https://www.linkedin.com/in/ibrahim-haji-647836347" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+          <a href="https://www.instagram.com/cineplay_officials" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="mailto:cineplayofficials@gmail.com" class="social-link" aria-label="Email Us"><i class="fa-solid fa-envelope"></i></a>
+        </div>
+      </div>
+      <div>
+        <h3 class="footer-title">Browse</h3>
+        <ul class="footer-links">
+          <li><a href="movies.html">Movies Catalog</a></li>
+          <li><a href="games.html">Games Catalog</a></li>
+          <li><a href="recommendations.html">Recommendation Engine</a></li>
+          <li><a href="favorites.html">Your Favorites</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer-title">Platform</h3>
+        <ul class="footer-links">
+          <li><a href="about.html">About Project</a></li>
+          <li><a href="about.html#features">Features</a></li>
+          <li><a href="about.html#tech">Tech Stack</a></li>
+          <li><a href="about.html#developers">Contributors</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer-title">Contributors</h3>
+        <div class="footer-contributors">
+          <div class="contributor-item">
+            <div class="contributor-name"><i class="fa-solid fa-code" style="color: var(--accent-red); margin-right: 6px;"></i> Ibrahim Haji</div>
+            <div class="contributor-role">Developer</div>
+            <a href="mailto:ibrahim.haji.3595@gmail.com" class="contributor-email">ibrahim.haji.3595@gmail.com</a>
+          </div>
+          <div class="contributor-item">
+            <div class="contributor-name"><i class="fa-solid fa-palette" style="color: var(--accent-red); margin-right: 6px;"></i> Arman Khan</div>
+            <div class="contributor-role">Designer & Product Manager</div>
+            <a href="mailto:rdjfanarman@gmail.com" class="contributor-email">rdjfanarman@gmail.com</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 CinePlay. Made as a BCA Mini Project. All rights reserved.</p>
+      <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+        <a href="mailto:cineplayofficials@gmail.com" style="color: var(--accent-red); font-weight: 500;"><i class="fa-solid fa-envelope"></i> cineplayofficials@gmail.com</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <!-- Firebase Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/api-service.js"></script>
+  <script src="js/firestore-service.js"></script>
+  <script src="js/cineplay-data-manager.js"></script>
+
+  <script src="js/data.js?v=3"></script>
+  <script src="js/app.js?v=3"></script>
+  
+  
+</body>
+</html>

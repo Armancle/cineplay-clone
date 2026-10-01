@@ -1,0 +1,68 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Node / Package Managers
+node_modules/
+package-lock.json
+yarn.lock
+.pnp
+.pnp.js
+
+# Build Artifacts
+dist/
+build/
+.cache/
+.parcel-cache/
+
+# Environment / Secrets
+.env
+.env.*
+*.env
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
+secrets/
+*.key
+*.pem
+
+# Firebase / API Config (contains sensitive keys - keep private)
+js/firebase-config.js
+frontend/js/firebase-config.js
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains IDEs
+.idea/
+*.iml
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V500
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary Files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# Test Coverage
+coverage/
+.nyc_output/
