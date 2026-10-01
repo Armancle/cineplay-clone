@@ -8,6 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
 // Current user state
 let currentUser = null;
 
+// Safe Toast Dispatcher that works across all pages (even if app.js is not loaded)
+function safeShowToast(msg, icon = "fa-solid fa-circle-user") {
+  if (window.CinePlay && typeof window.CinePlay.showToast === "function") {
+    window.CinePlay.showToast(msg, icon);
+  }
+}
+
 // Initialize the Auth UI placeholders
 function initAuthUI() {
   const authContainers = document.querySelectorAll("#auth-container");
@@ -62,7 +69,7 @@ function setupAuthListeners() {
           const photo = result.user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(result.user.displayName || "User")}&background=e50914&color=ffffff&bold=true&rounded=true`;
           updateUIForLoggedInUser(result.user.displayName, photo);
           await syncUserDataOnLogin(result.user.uid);
-          window.CinePlay.showToast(`Welcome back, ${result.user.displayName}!`, "fa-solid fa-circle-user");
+          safeShowToast(`Welcome back, ${result.user.displayName}!`, "fa-solid fa-circle-user");
         }
       })
       .catch((error) => {
@@ -174,7 +181,7 @@ function login() {
     window.firebaseAuth.signInWithPopup(provider)
       .then((result) => {
         if (result && result.user) {
-          window.CinePlay.showToast(`Welcome back, ${result.user.displayName}!`, "fa-solid fa-circle-user");
+          safeShowToast(`Welcome back, ${result.user.displayName}!`, "fa-solid fa-circle-user");
         }
       })
       .catch((error) => {
@@ -186,15 +193,15 @@ function login() {
           error.code === "auth/cancelled-popup-request" ||
           error.code === "auth/popup-closed-by-user"
         ) {
-          window.CinePlay.showToast("Opening secure Google Sign-In...", "fa-brands fa-google");
+          safeShowToast("Opening secure Google Sign-In...", "fa-brands fa-google");
           window.firebaseAuth.signInWithRedirect(provider).catch(e => {
             console.error("Redirect fallback error:", e);
-            window.CinePlay.showToast("Login failed. Check authorized domains in Firebase.", "fa-solid fa-circle-exclamation");
+            safeShowToast("Login failed. Check authorized domains in Firebase.", "fa-solid fa-circle-exclamation");
           });
         } else if (error.code === "auth/unauthorized-domain") {
-          window.CinePlay.showToast("Domain not authorized in Firebase Console Settings.", "fa-solid fa-triangle-exclamation");
+          safeShowToast("Domain not authorized in Firebase Console Settings.", "fa-solid fa-triangle-exclamation");
         } else {
-          window.CinePlay.showToast("Login issue: " + (error.message || "Please try again"), "fa-solid fa-circle-exclamation");
+          safeShowToast("Login issue: " + (error.message || "Please try again"), "fa-solid fa-circle-exclamation");
         }
       });
   } else {
@@ -215,7 +222,7 @@ function logout() {
           updateUIForLoggedOutUser();
           window.dispatchEvent(new Event("favoritesChanged"));
           window.dispatchEvent(new Event("dislikesChanged"));
-          window.CinePlay.showToast("Logged out successfully", "fa-solid fa-right-from-bracket");
+          safeShowToast("Logged out successfully", "fa-solid fa-right-from-bracket");
         });
       return;
     }
@@ -227,7 +234,7 @@ function logout() {
         localStorage.removeItem("cineplay_dislikes");
         window.dispatchEvent(new Event("favoritesChanged"));
         window.dispatchEvent(new Event("dislikesChanged"));
-        window.CinePlay.showToast("Logged out successfully", "fa-solid fa-right-from-bracket");
+        safeShowToast("Logged out successfully", "fa-solid fa-right-from-bracket");
       });
     } else {
       localStorage.removeItem("cineplay_mock_user");
@@ -237,7 +244,7 @@ function logout() {
       updateUIForLoggedOutUser();
       window.dispatchEvent(new Event("favoritesChanged"));
       window.dispatchEvent(new Event("dislikesChanged"));
-      window.CinePlay.showToast("Logged out", "fa-solid fa-right-from-bracket");
+      safeShowToast("Logged out", "fa-solid fa-right-from-bracket");
     }
   }
 }
@@ -548,7 +555,7 @@ function showMockAuthPopup() {
         await syncUserDataOnLogin(data.user.user_id);
 
         modal.classList.remove("active");
-        window.CinePlay.showToast(data.message || `Welcome, ${data.user.username}!`, "fa-solid fa-circle-user");
+        safeShowToast(data.message || `Welcome, ${data.user.username}!`, "fa-solid fa-circle-user");
       } catch (err) {
         errBanner.textContent = err.message || "An error occurred. Check XAMPP MySQL status.";
         errBanner.style.display = "block";
@@ -570,7 +577,7 @@ function showMockAuthPopup() {
       updateUIForLoggedInUser(mockUserObj.displayName, mockUserObj.photoURL);
       modal.classList.remove("active");
       syncUserDataOnLogin(mockUserObj.uid);
-      window.CinePlay.showToast("Logged in as Guest", "fa-solid fa-circle-user");
+      safeShowToast("Logged in as Guest", "fa-solid fa-circle-user");
     });
   }
 
@@ -599,7 +606,7 @@ async function loginManual(identifier, password) {
   const photo = `https://ui-avatars.com/api/?name=${encodeURIComponent(data.user.username)}&background=e50914&color=ffffff&bold=true&rounded=true`;
   updateUIForLoggedInUser(data.user.username, photo);
   await syncUserDataOnLogin(data.user.user_id);
-  window.CinePlay.showToast(data.message || `Welcome, ${data.user.username}!`, "fa-solid fa-circle-user");
+  safeShowToast(data.message || `Welcome, ${data.user.username}!`, "fa-solid fa-circle-user");
   return data;
 }
 
@@ -624,7 +631,7 @@ async function registerManual(username, email, password) {
   const photo = `https://ui-avatars.com/api/?name=${encodeURIComponent(data.user.username)}&background=e50914&color=ffffff&bold=true&rounded=true`;
   updateUIForLoggedInUser(data.user.username, photo);
   await syncUserDataOnLogin(data.user.user_id);
-  window.CinePlay.showToast(data.message || `Welcome, ${data.user.username}!`, "fa-solid fa-circle-user");
+  safeShowToast(data.message || `Welcome, ${data.user.username}!`, "fa-solid fa-circle-user");
   return data;
 }
 
@@ -659,7 +666,7 @@ async function loginGoogle() {
           };
           updateUIForLoggedInUser(currentUser.displayName, currentUser.photoURL);
           await syncUserDataOnLogin(data.user.user_id);
-          window.CinePlay.showToast(`Welcome back, ${currentUser.displayName}!`, "fa-solid fa-circle-user");
+          safeShowToast(`Welcome back, ${currentUser.displayName}!`, "fa-solid fa-circle-user");
           return currentUser;
         }
       } catch (e) {
@@ -668,7 +675,7 @@ async function loginGoogle() {
       currentUser = result.user;
       updateUIForLoggedInUser(result.user.displayName, result.user.photoURL);
       await syncUserDataOnLogin(result.user.uid);
-      window.CinePlay.showToast(`Welcome back, ${result.user.displayName}!`, "fa-solid fa-circle-user");
+      safeShowToast(`Welcome back, ${result.user.displayName}!`, "fa-solid fa-circle-user");
       return currentUser;
     }
   } else {
